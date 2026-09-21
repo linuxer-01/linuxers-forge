@@ -10,33 +10,78 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as BlogsRouteImport } from './routes/blogs'
+import { Route as AdminEditorRouteImport } from './routes/admin.editor'
+import { Route as BlogsCampusInnovationRouteImport } from './routes/blogs.campus-innovation'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogsRoute = BlogsRouteImport.update({
+  id: '/blogs',
+  path: '/blogs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminEditorRoute = AdminEditorRouteImport.update({
+  id: '/editor',
+  path: '/editor',
+  getParentRoute: () => AdminRoute,
+} as any)
+const BlogsCampusInnovationRoute = BlogsCampusInnovationRouteImport.update({
+  id: '/campus-innovation',
+  path: '/campus-innovation',
+  getParentRoute: () => BlogsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/blogs': typeof BlogsRouteWithChildren
+  '/admin/editor': typeof AdminEditorRoute
+  '/blogs/campus-innovation': typeof BlogsCampusInnovationRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/blogs': typeof BlogsRouteWithChildren
+  '/admin/editor': typeof AdminEditorRoute
+  '/blogs/campus-innovation': typeof BlogsCampusInnovationRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/blogs': typeof BlogsRouteWithChildren
+  '/admin/editor': typeof AdminEditorRoute
+  '/blogs/campus-innovation': typeof BlogsCampusInnovationRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/admin' | '/blogs' | '/admin/editor' | '/blogs/campus-innovation'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/admin' | '/blogs' | '/admin/editor' | '/blogs/campus-innovation'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/blogs'
+    | '/admin/editor'
+    | '/blogs/campus-innovation'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  BlogsRoute: typeof BlogsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +93,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blogs': {
+      id: '/blogs'
+      path: '/blogs'
+      fullPath: '/blogs'
+      preLoaderRoute: typeof BlogsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/editor': {
+      id: '/admin/editor'
+      path: '/editor'
+      fullPath: '/admin/editor'
+      preLoaderRoute: typeof AdminEditorRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/blogs/campus-innovation': {
+      id: '/blogs/campus-innovation'
+      path: '/campus-innovation'
+      fullPath: '/blogs/campus-innovation'
+      preLoaderRoute: typeof BlogsCampusInnovationRouteImport
+      parentRoute: typeof BlogsRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminEditorRoute: typeof AdminEditorRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminEditorRoute: AdminEditorRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface BlogsRouteChildren {
+  BlogsCampusInnovationRoute: typeof BlogsCampusInnovationRoute
+}
+
+const BlogsRouteChildren: BlogsRouteChildren = {
+  BlogsCampusInnovationRoute: BlogsCampusInnovationRoute,
+}
+
+const BlogsRouteWithChildren = BlogsRoute._addFileChildren(BlogsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  BlogsRoute: BlogsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
