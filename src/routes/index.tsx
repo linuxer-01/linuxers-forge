@@ -20,7 +20,6 @@ import { BlogCard } from "@/components/blog-card";
 import { LinuxersLogo } from "@/components/linuxers-logo";
 import { PublicPage } from "@/components/site-shell";
 import { Button } from "@/components/ui/button";
-import icyMilkyWay from "@/assets/icy-milky-way.jpg";
 import { posts } from "@/lib/blog-data";
 import { siteConfig, socialLinks } from "@/lib/site-config";
 
@@ -58,8 +57,8 @@ function Index() {
     <PublicPage>
       {/* Hero */}
       <section className="ambient-canvas relative overflow-hidden border-b border-border">
-        <div className="relative mx-auto grid min-h-[min(760px,88vh)] max-w-7xl items-center gap-10 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-[minmax(0,0.9fr)_minmax(22rem,1.1fr)] lg:gap-6">
-          <div className="relative z-10 max-w-3xl">
+        <div className="relative mx-auto flex min-h-[min(720px,80vh)] max-w-7xl items-center px-4 py-24 sm:px-6 sm:py-28">
+          <div className="max-w-3xl">
             <div className="flex items-center gap-3">
               <LinuxersLogo className="size-10 shrink-0 sm:size-12" />
               <div className="min-w-0 text-xs font-semibold uppercase leading-tight text-gold-ink">
@@ -88,16 +87,6 @@ function Index() {
                 <a href="#about">About us</a>
               </Button>
             </div>
-          </div>
-          <div className="galaxy-stage" aria-hidden="true">
-            <img
-              src={icyMilkyWay}
-              alt=""
-              width={1600}
-              height={1200}
-              className="galaxy-image"
-            />
-            <span className="galaxy-core" />
           </div>
         </div>
       </section>
