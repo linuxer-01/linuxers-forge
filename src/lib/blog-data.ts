@@ -1,70 +1,77 @@
-import founderStory from "@/assets/founder-story.jpg";
-import linuxWorkshop from "@/assets/linux-workshop.jpg";
-import linuxersLab from "@/assets/linuxers-lab.jpg";
-import roboticsStory from "@/assets/robotics-story.jpg";
-
-export const categories = ["All", "Startups", "Deep Tech", "Linux", "Campus Ventures", "Case Studies", "Events"];
-
-export const posts = [
-  {
-    slug: "campus-innovation",
-    title: "The Architecture of Campus-Led Innovation Units",
-    excerpt: "How small, decentralized student teams turn technical curiosity into ventures built for the real world.",
-    category: "Deep Tech",
-    author: "Aarav Menon",
-    date: "18 Sep 2026",
-    readTime: "12 min read",
-    image: linuxersLab,
-    featured: true,
-  },
-  {
-    slug: "robotics-prototype",
-    title: "From Breadboard to Field Test in Four Weeks",
-    excerpt: "A candid field log from the team behind an affordable indoor navigation robot.",
-    category: "Campus Ventures",
-    author: "Diya Nair",
-    date: "14 Sep 2026",
-    readTime: "8 min read",
-    image: roboticsStory,
-  },
-  {
-    slug: "linux-workshop",
-    title: "Why Open Source Is a Founder’s Unfair Advantage",
-    excerpt: "The tools, communities, and habits helping first-time builders move with confidence.",
-    category: "Linux",
-    author: "Rohan Iyer",
-    date: "09 Sep 2026",
-    readTime: "7 min read",
-    image: linuxWorkshop,
-  },
-  {
-    slug: "founder-discovery",
-    title: "A Better First Question Than ‘What Should We Build?’",
-    excerpt: "Five days of customer discovery changed the direction of a campus hardware team.",
-    category: "Startups",
-    author: "Meera Joseph",
-    date: "02 Sep 2026",
-    readTime: "9 min read",
-    image: founderStory,
-  },
-  {
-    slug: "signal-not-noise",
-    title: "Signal, Not Noise: Our Demo Day Selection Framework",
-    excerpt: "A practical scorecard for identifying clear thinking, genuine insight, and founder velocity.",
-    category: "Case Studies",
-    author: "Linuxers Editorial",
-    date: "28 Aug 2026",
-    readTime: "6 min read",
-    image: linuxersLab,
-  },
-  {
-    slug: "build-night",
-    title: "Inside Build Night: 70 Makers, One Relentless Evening",
-    excerpt: "People, prototypes, and the productive chaos of our largest community build yet.",
-    category: "Events",
-    author: "Nikhil Das",
-    date: "20 Aug 2026",
-    readTime: "5 min read",
-    image: linuxWorkshop,
-  },
+export const categories = [
+  "All",
+  "Startups",
+  "Deep Tech",
+  "Linux",
+  "Campus Ventures",
+  "Case Studies",
+  "Events",
 ];
+
+/**
+ * Article bodies are stored as typed blocks rather than raw HTML so the reading
+ * page renders every element with the editorial styles defined in `.article-prose`.
+ */
+export type ContentBlock =
+  | { type: "lead"; text: string }
+  | { type: "h2"; text: string }
+  | { type: "h3"; text: string }
+  | { type: "p"; text: string }
+  | { type: "quote"; text: string }
+  | { type: "ul"; items: string[] }
+  | { type: "ol"; items: string[] }
+  | { type: "code"; code: string }
+  | { type: "image"; src: string; alt: string; caption: string };
+
+export type Post = {
+  /** URL segment: /blogs/<slug> */
+  slug: string;
+  title: string;
+  excerpt: string;
+  /** Must be one of `categories` (excluding "All"). */
+  category: string;
+  author: string;
+  authorRole: string;
+  date: string;
+  readTime: string;
+  /** Import the image at the top of this file and reference it here. */
+  image: string;
+  /** At most one post should set this; it becomes the lead card on /blogs. */
+  featured?: boolean;
+  tags: string[];
+  content: ContentBlock[];
+};
+
+/**
+ * Real Linuxers articles go here. Empty until the E-Cell publishes its first
+ * post — every page handles the empty state, so the site is safe to ship as is.
+ *
+ * To add one:
+ *   1. `import cover from "@/assets/<file>.jpg";` at the top of this file.
+ *   2. Append a Post object below. Newest first; /blogs renders in this order.
+ *   3. Build the body from ContentBlock entries, e.g.
+ *      { type: "h2", text: "..." }, { type: "p", text: "..." }
+ */
+export const posts: Post[] = [];
+
+export function getPostBySlug(slug: string): Post | undefined {
+  return posts.find((post) => post.slug === slug);
+}
+
+/** Neighbouring articles for the previous/next footer on a reading page. */
+export function getAdjacentPosts(slug: string) {
+  const index = posts.findIndex((post) => post.slug === slug);
+  if (index === -1) return { previous: undefined, next: undefined };
+  return { previous: posts[index - 1], next: posts[index + 1] };
+}
+
+/** Same-category articles first, topped up with the newest stories. */
+export function getRelatedPosts(slug: string, limit = 3): Post[] {
+  const current = getPostBySlug(slug);
+  if (!current) return posts.slice(0, limit);
+  const sameCategory = posts.filter(
+    (post) => post.slug !== slug && post.category === current.category,
+  );
+  const others = posts.filter((post) => post.slug !== slug && post.category !== current.category);
+  return [...sameCategory, ...others].slice(0, limit);
+}

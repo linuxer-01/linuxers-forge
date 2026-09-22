@@ -10,78 +10,128 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AdminRouteImport } from './routes/admin'
-import { Route as BlogsRouteImport } from './routes/blogs'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminBlogsRouteImport } from './routes/admin.blogs'
 import { Route as AdminEditorRouteImport } from './routes/admin.editor'
-import { Route as BlogsCampusInnovationRouteImport } from './routes/blogs.campus-innovation'
+import { Route as AdminMediaRouteImport } from './routes/admin.media'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as BlogsIndexRouteImport } from './routes/blogs.index'
+import { Route as BlogsSlugRouteImport } from './routes/blogs.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BlogsRoute = BlogsRouteImport.update({
-  id: '/blogs',
-  path: '/blogs',
+const AdminBlogsRoute = AdminBlogsRouteImport.update({
+  id: '/admin/blogs',
+  path: '/admin/blogs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminEditorRoute = AdminEditorRouteImport.update({
-  id: '/editor',
-  path: '/editor',
-  getParentRoute: () => AdminRoute,
+  id: '/admin/editor',
+  path: '/admin/editor',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const BlogsCampusInnovationRoute = BlogsCampusInnovationRouteImport.update({
-  id: '/campus-innovation',
-  path: '/campus-innovation',
-  getParentRoute: () => BlogsRoute,
+const AdminMediaRoute = AdminMediaRouteImport.update({
+  id: '/admin/media',
+  path: '/admin/media',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/admin/settings',
+  path: '/admin/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogsIndexRoute = BlogsIndexRouteImport.update({
+  id: '/blogs/',
+  path: '/blogs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogsSlugRoute = BlogsSlugRouteImport.update({
+  id: '/blogs/$slug',
+  path: '/blogs/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
-  '/blogs': typeof BlogsRouteWithChildren
+  '/admin/blogs': typeof AdminBlogsRoute
   '/admin/editor': typeof AdminEditorRoute
-  '/blogs/campus-innovation': typeof BlogsCampusInnovationRoute
+  '/admin/media': typeof AdminMediaRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/blogs/$slug': typeof BlogsSlugRoute
+  '/admin/': typeof AdminIndexRoute
+  '/blogs/': typeof BlogsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
-  '/blogs': typeof BlogsRouteWithChildren
+  '/admin/blogs': typeof AdminBlogsRoute
   '/admin/editor': typeof AdminEditorRoute
-  '/blogs/campus-innovation': typeof BlogsCampusInnovationRoute
+  '/admin/media': typeof AdminMediaRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/blogs/$slug': typeof BlogsSlugRoute
+  '/admin': typeof AdminIndexRoute
+  '/blogs': typeof BlogsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
-  '/blogs': typeof BlogsRouteWithChildren
+  '/admin/blogs': typeof AdminBlogsRoute
   '/admin/editor': typeof AdminEditorRoute
-  '/blogs/campus-innovation': typeof BlogsCampusInnovationRoute
+  '/admin/media': typeof AdminMediaRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/blogs/$slug': typeof BlogsSlugRoute
+  '/admin/': typeof AdminIndexRoute
+  '/blogs/': typeof BlogsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/admin' | '/blogs' | '/admin/editor' | '/blogs/campus-innovation'
+    | '/'
+    | '/admin/blogs'
+    | '/admin/editor'
+    | '/admin/media'
+    | '/admin/settings'
+    | '/blogs/$slug'
+    | '/admin/'
+    | '/blogs/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/blogs' | '/admin/editor' | '/blogs/campus-innovation'
+  to:
+    | '/'
+    | '/admin/blogs'
+    | '/admin/editor'
+    | '/admin/media'
+    | '/admin/settings'
+    | '/blogs/$slug'
+    | '/admin'
+    | '/blogs'
   id:
     | '__root__'
     | '/'
-    | '/admin'
-    | '/blogs'
+    | '/admin/blogs'
     | '/admin/editor'
-    | '/blogs/campus-innovation'
+    | '/admin/media'
+    | '/admin/settings'
+    | '/blogs/$slug'
+    | '/admin/'
+    | '/blogs/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRouteWithChildren
-  BlogsRoute: typeof BlogsRouteWithChildren
+  AdminBlogsRoute: typeof AdminBlogsRoute
+  AdminEditorRoute: typeof AdminEditorRoute
+  AdminMediaRoute: typeof AdminMediaRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  BlogsSlugRoute: typeof BlogsSlugRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  BlogsIndexRoute: typeof BlogsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -93,61 +143,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin': {
-      id: '/admin'
+    '/admin/': {
+      id: '/admin/'
       path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/blogs': {
-      id: '/blogs'
-      path: '/blogs'
-      fullPath: '/blogs'
-      preLoaderRoute: typeof BlogsRouteImport
+    '/admin/blogs': {
+      id: '/admin/blogs'
+      path: '/admin/blogs'
+      fullPath: '/admin/blogs'
+      preLoaderRoute: typeof AdminBlogsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/editor': {
       id: '/admin/editor'
-      path: '/editor'
+      path: '/admin/editor'
       fullPath: '/admin/editor'
       preLoaderRoute: typeof AdminEditorRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
-    '/blogs/campus-innovation': {
-      id: '/blogs/campus-innovation'
-      path: '/campus-innovation'
-      fullPath: '/blogs/campus-innovation'
-      preLoaderRoute: typeof BlogsCampusInnovationRouteImport
-      parentRoute: typeof BlogsRoute
+    '/admin/media': {
+      id: '/admin/media'
+      path: '/admin/media'
+      fullPath: '/admin/media'
+      preLoaderRoute: typeof AdminMediaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/admin/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blogs/': {
+      id: '/blogs/'
+      path: '/blogs'
+      fullPath: '/blogs/'
+      preLoaderRoute: typeof BlogsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blogs/$slug': {
+      id: '/blogs/$slug'
+      path: '/blogs/$slug'
+      fullPath: '/blogs/$slug'
+      preLoaderRoute: typeof BlogsSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
-interface AdminRouteChildren {
-  AdminEditorRoute: typeof AdminEditorRoute
-}
-
-const AdminRouteChildren: AdminRouteChildren = {
-  AdminEditorRoute: AdminEditorRoute,
-}
-
-const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
-
-interface BlogsRouteChildren {
-  BlogsCampusInnovationRoute: typeof BlogsCampusInnovationRoute
-}
-
-const BlogsRouteChildren: BlogsRouteChildren = {
-  BlogsCampusInnovationRoute: BlogsCampusInnovationRoute,
-}
-
-const BlogsRouteWithChildren = BlogsRoute._addFileChildren(BlogsRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRouteWithChildren,
-  BlogsRoute: BlogsRouteWithChildren,
+  AdminBlogsRoute: AdminBlogsRoute,
+  AdminEditorRoute: AdminEditorRoute,
+  AdminMediaRoute: AdminMediaRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  BlogsSlugRoute: BlogsSlugRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  BlogsIndexRoute: BlogsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

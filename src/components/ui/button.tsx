@@ -9,11 +9,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        emerald: "bg-emerald text-midnight hover:bg-emerald-soft",
-        outline: "border border-border bg-transparent text-foreground hover:border-purple/50 hover:bg-card",
-        ghost: "text-muted-foreground hover:bg-card hover:text-foreground",
-        subtle: "bg-card text-foreground hover:bg-card/80",
+        default: "bg-primary text-primary-foreground hover:bg-blue-ink",
+        /* Gold fill carries navy text; hover deepens the gold rather than the text. */
+        gold: "bg-gold text-ink hover:bg-gold/85",
+        outline:
+          "border border-input bg-card/60 text-foreground hover:border-blue/60 hover:bg-card",
+        ghost: "text-muted-foreground hover:bg-secondary hover:text-foreground",
+        subtle: "bg-secondary text-foreground hover:bg-muted",
       },
       size: {
         default: "h-10 px-4",

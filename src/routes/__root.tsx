@@ -11,20 +11,32 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { LinuxersLogo } from "@/components/linuxers-logo";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+    <div className="ambient-canvas flex min-h-screen items-center justify-center bg-background px-4 py-16">
+      <div className="glass-card w-full max-w-lg p-8 text-center sm:p-12">
+        <LinuxersLogo className="mx-auto size-14" />
+        <p className="mt-8 font-display text-6xl font-semibold text-blue-ink sm:text-7xl">404</p>
+        <h1 className="mt-4 font-display text-2xl font-semibold text-balance">
+          This page left the whiteboard.
+        </h1>
+        <p className="mt-3 text-sm leading-6 text-muted-foreground">
+          The page you&rsquo;re looking for doesn&rsquo;t exist or has been moved. The blog is still
+          where you left it.
         </p>
-        <div className="mt-6">
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <Link
+            to="/blogs"
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-gold px-4 text-sm font-semibold text-ink transition-colors hover:bg-gold-ink"
+          >
+            Browse the blog
+          </Link>
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex h-10 items-center justify-center rounded-md border border-border px-4 text-sm font-semibold text-foreground transition-colors hover:border-blue/50 hover:bg-card"
           >
             Go home
           </Link>
@@ -42,27 +54,28 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
+    <div className="ambient-canvas flex min-h-screen items-center justify-center bg-background px-4 py-16">
+      <div className="glass-card w-full max-w-lg p-8 text-center sm:p-12">
+        <LinuxersLogo className="mx-auto size-14" />
+        <h1 className="mt-8 font-display text-2xl font-semibold text-balance">
           This page didn't load
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+        <p className="mt-3 text-sm leading-6 text-muted-foreground">
+          Something went wrong on our end. You can try again or head back home.
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
           <button
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex h-10 items-center justify-center rounded-md bg-gold px-4 text-sm font-semibold text-ink transition-colors hover:bg-gold-ink"
           >
             Try again
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="inline-flex h-10 items-center justify-center rounded-md border border-border px-4 text-sm font-semibold text-foreground transition-colors hover:border-blue/50 hover:bg-card"
           >
             Go home
           </a>
@@ -90,7 +103,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Space+Grotesk:wght@500;600;700&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Space+Grotesk:wght@500;600;700&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -120,6 +136,8 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      {/* The canvas is light-only, so pin sonner's theme rather than following the OS. */}
+      <Toaster theme="light" position="top-right" richColors />
     </QueryClientProvider>
   );
 }
